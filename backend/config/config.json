@@ -1,0 +1,17 @@
+{
+  "development": {
+    "storage": "var/invest_flow.sqlite",
+    "database": "invest_flow_development",
+    "dialect": "sqlite"
+  },
+  "test": {
+    "database": "invest_flow_test",
+    "storage": "var/invest_flow.sqlite",
+    "dialect": "sqlite"
+  },
+  "production": {
+    "database": "invest_flow",
+    "storage": "var/invest_flow.sqlite",
+    "dialect": "sqlite"
+  }
+}

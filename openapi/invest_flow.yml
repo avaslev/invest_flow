@@ -1,0 +1,202 @@
+openapi: '3.0.2'
+info:
+  title: API Invest Flow
+  version: '1.0'
+servers:
+  - url: http://localhost:5000/v1
+tags:
+  - name: actives
+    description: Everything about your actives
+
+components:
+  schemas:
+    Action:
+      type: object
+      required:
+        - date
+        - count
+        - sum
+        - operation
+      properties:
+        id:
+          type: integer
+        date:
+          type: string
+          format: date-time
+        from:
+          $ref: '#/components/schemas/Tool'
+        to:
+          $ref: '#/components/schemas/Tool'
+        count:
+          type: integer
+          format: int32
+          description: count items to add in tool
+        sum:
+          type: number
+        operation:
+          type: string
+          enum:
+            - income
+            - outlay
+            - transfer
+        note:
+          type: string
+          description: Broker comision
+    Tool:
+      type: object
+      required:
+        - name
+        - isUser
+        - isArhive
+        - type
+      description: 'Tool is universal active, like account, credit, bound'
+      properties:
+        externalId:
+          type: string
+          example: SU26207RMFS9, USD, anyName
+        name:
+          type: string
+        fullName:
+          type: string
+        isUser:
+          type: boolean
+        isArhive:
+          type: boolean
+        type:
+          type: string
+          enum:
+            - bound
+            - cash
+paths:
+  /actions:
+    get:
+      tags:
+        - actives
+      description: 'Return action list'
+      parameters: []
+      responses:
+        '200':
+          description: OK    
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Action'
+    post:
+      tags:
+        - actives
+      description: 'Create action'
+      operationId: createAction
+      requestBody:
+        description: Update an existent action
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Action'
+        required: true  
+      responses:
+        '201':
+          description: OK    
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Action'    
+        '400':
+          description: Bad request
+  /actions/{actionId}:
+    put:
+      tags:
+        - actives
+      description: 'Update action'
+      operationId: updateAction
+      parameters:
+        - name: actionId
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        description: Update an existent action
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Action'
+        required: true  
+      responses:
+        '200':
+          description: OK    
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Action'    
+        '400':
+          description: Invalid ID supplied
+        '404':
+          description: Pet not found
+        '405':
+          description: Validation exception
+  /tools:
+    get:
+      tags:
+        - actives
+      description: 'Get list tools'
+      parameters: []
+      responses:
+        '200':
+          description: OK    
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Tool'
+    post:
+      summary: Create tool
+      description: ''
+      operationId: createTool
+      tags:
+        - actives
+      requestBody:
+        description: Update an existent action
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tool'
+        required: true  
+      responses:
+        '201':
+          description: OK    
+        '400':
+          description: Validation exception
+  /tools/{toolId}:
+    put:
+      summary: Update tool
+      description: ''
+      operationId: updateTool
+      tags:
+        - actives
+      requestBody:
+        description: Update an existent action
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Tool'
+        required: true  
+      responses:
+        '201':
+          description: OK    
+        '400':
+          description: Validation exception
+    delete:
+      summary: Remove tool
+      description: ''
+      operationId: removeTool
+      tags:
+        - actives
+      responses:
+        '201':
+          description: OK    
+        '404':
+          description: Tool not found
