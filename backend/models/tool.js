@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+
 module.exports = (sequelize, DataTypes) => {
   class Tool extends Model {
     /**
@@ -17,14 +18,32 @@ module.exports = (sequelize, DataTypes) => {
     id: {
       allowNull: false,
       primaryKey: true,
-      type: DataTypes.UUID
+      unique: true,
+      type: DataTypes.STRING,
+      validate: {
+        len: [1,16]
+      }
     },
     externalId: DataTypes.STRING,
-    name: DataTypes.STRING,
+    name: {
+      type: DataTypes.STRING,
+      allowNull: false
+    },
     fullName: DataTypes.STRING,
-    isUser: DataTypes.BOOLEAN,
-    isArhive: DataTypes.BOOLEAN,
-    type: DataTypes.STRING
+    isUser: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: true,
+    },
+    isArhive: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+    },
+    type: {
+      type: DataTypes.STRING,
+      validate: {
+        isIn: [['bound', 'cash']]
+      }
+    }
   }, {
     sequelize,
     modelName: 'Tool',

@@ -18,7 +18,6 @@ module.exports = (sequelize, DataTypes) => {
     id: {
       primaryKey: true,
       type: DataTypes.UUID
-
     },
     date: DataTypes.DATEONLY,
     from: DataTypes.STRING,

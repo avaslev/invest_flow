@@ -19,7 +19,8 @@ components:
         - operation
       properties:
         id:
-          type: integer
+          type: string
+          format: uuid
         date:
           type: string
           format: date-time
@@ -49,8 +50,12 @@ components:
         - isUser
         - isArhive
         - type
-      description: 'Tool is universal active, like account, credit, bound'
+      description: Tool is universal active, like account, credit, bound
       properties:
+        id:
+          type: string
+          maxLength: 16
+          example: SU26207RMFS9, USD_ANY
         externalId:
           type: string
           example: SU26207RMFS9, USD, anyName
@@ -115,8 +120,8 @@ paths:
           in: path
           required: true
           schema:
-            type: integer
-            format: int64
+            type: string
+            format: uuid
       requestBody:
         description: Update an existent action
         content:
@@ -137,12 +142,39 @@ paths:
           description: Pet not found
         '405':
           description: Validation exception
-  /tools:
-    get:
+    delete:
+      summary: Remove action
+      operationId: removeAction
       tags:
         - actives
-      description: 'Get list tools'
-      parameters: []
+      parameters:
+        - name: actionId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '201':
+          description: OK    
+        '404':
+          description: Action not found
+  /tools:
+    get:
+      summary: Get list tools
+      description: Get list tools
+      tags:
+        - actives
+      operationId: listTotals
+      parameters:
+        - name: isUser
+          in: query
+          schema:
+            type: boolean
+        - name: isArhive
+          in: query
+          schema:
+            type: boolean
       responses:
         '200':
           description: OK    
@@ -154,12 +186,11 @@ paths:
                   $ref: '#/components/schemas/Tool'
     post:
       summary: Create tool
-      description: ''
+      description: Create toll
       operationId: createTool
       tags:
         - actives
       requestBody:
-        description: Update an existent action
         content:
           application/json:
             schema:
@@ -177,6 +208,12 @@ paths:
       operationId: updateTool
       tags:
         - actives
+      parameters:
+        - name: toolId
+          in: path
+          required: true
+          schema:
+            type: string
       requestBody:
         description: Update an existent action
         content:
@@ -195,6 +232,12 @@ paths:
       operationId: removeTool
       tags:
         - actives
+      parameters: 
+        - name: toolId
+          in: path
+          required: true
+          schema:
+            type: string
       responses:
         '201':
           description: OK    
