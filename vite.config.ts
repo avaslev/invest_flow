@@ -8,6 +8,9 @@ export default defineConfig({
     react(),
     legacy()
   ],
+  optimizeDeps: {
+    exclude: ['jeep-sqlite/loader']
+  },
   test: {
     globals: true,
     environment: 'jsdom',
