@@ -1,7 +1,9 @@
+import React from 'react';
 import { IonButton, IonButtons, IonContent, IonHeader, IonInput, IonItem, IonPage, IonSelect, IonSelectOption, IonText, IonTitle, IonToolbar } from '@ionic/react';
-import { Tool, ToolSchema, ToolTypeEnum } from '../../models';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from "@hookform/resolvers/yup"
+// import { yupResolver } from "@hookform/resolvers/yup"
+import { Tool, ToolTypeEnum } from '../../entity/tool';
+// import { Tool, ToolSchema, ToolTypeEnum } from '../../model/Tool';
 
 
 export enum ToolEditActionEnum {
@@ -21,7 +23,7 @@ const ToolEditModal = ({
     register,
     formState: { errors }
   } = useForm({
-    resolver: yupResolver(ToolSchema),
+    // resolver: yupResolver(ToolSchema),
     defaultValues: tool
   });
 
@@ -56,9 +58,8 @@ const ToolEditModal = ({
       <IonContent className="ion-padding">
         <IonItem>
           <IonSelect
-
-            label="Type"
-            labelPlacement="stacked"
+            // label="Type"
+            // labelPlacement="stacked"
             disabled={tool.id ? true : false}
             {...register('type')}
           >
@@ -70,19 +71,19 @@ const ToolEditModal = ({
         <IonItem>
             <IonInput
             className={errors.name && 'ion-invalid ion-touched'}
-            labelPlacement="stacked"
-            label="Name"
-            errorText={errors.name?.message}
+            // labelPlacement="stacked"
+            // label="Name"
+            // errorText={errors.name?.message}
             {...register('name')}
           />
         </IonItem>
         <IonItem>
           <IonInput
             className={errors.currentSum && 'ion-invalid ion-touched'}
-            labelPlacement="stacked"
-            label="Current sum"
+            // labelPlacement="stacked"
+            // label="Current sum"
             type='number'
-            errorText={errors.currentSum?.message}
+            // errorText={errors.currentSum?.message}
             disabled={tool.id ? true : false}
             {...register('currentSum')}
           />

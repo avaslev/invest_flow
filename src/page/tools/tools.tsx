@@ -1,13 +1,16 @@
 import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonPage, IonRippleEffect, IonRow, IonText, IonTitle, IonToolbar, useIonModal } from '@ionic/react';
 import { add, ellipsisHorizontal } from 'ionicons/icons';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { OverlayEventDetail } from '@ionic/core/components';
-import ToolEditModal, { ToolEditActionEnum } from '../../components/tools/toolEdit';
-import { ToolTypeEnum } from '../../models';
+import ToolEditModal, { ToolEditActionEnum } from '../../component/tools/toolEdit';
 import GetToolList from '../../operations/tool/getToolList';
 import SaveTool from '../../operations/tool/saveTool';
+import { Tool, ToolTypeEnum } from '../../entity/tool';
 
-const tools = GetToolList();
+let tools = [] as Tool[];
+GetToolList().then((results: Tool[]) => {
+  tools = results;
+});
 
 const Tools: React.FC = () => {
   const [state, setState] = useState({ tools: tools });
@@ -35,8 +38,8 @@ const Tools: React.FC = () => {
     present({
       onWillDismiss: (ev: CustomEvent<OverlayEventDetail>) => {
         if (ev.detail.role === ToolEditActionEnum.Save) {
-          let tool = ev.detail.data;
-          tool.id = SaveTool(tool);
+          let tool: Tool = (new Tool()).fill(ev.detail.data);
+          SaveTool(tool);
           state.tools.push(tool);
           setState(state);
         }

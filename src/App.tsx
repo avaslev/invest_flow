@@ -1,20 +1,7 @@
+import React  from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import {
-  IonApp,
-  IonIcon,
-  IonLabel,
-  IonRouterOutlet,
-  IonTabBar,
-  IonTabButton,
-  IonTabs,
-  setupIonicReact
-} from '@ionic/react';
+import { IonApp, IonIcon, IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
-import { addCircleOutline, cashOutline, ellipse, hammerOutline, layersOutline, settingsOutline, square, trendingUpOutline, triangle } from 'ionicons/icons';
-import Tab1 from './pages/Tab1';
-import Tab2 from './pages/Tab2';
-import Tab3 from './pages/Tab3';
-import { SQLiteHook, useSQLite } from 'react-sqlite-hook';
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -34,44 +21,15 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import Tools from './pages/tools/tools';
-import { useState } from 'react';
-
-
-interface JsonListenerInterface {
-  jsonListeners: boolean,
-  setJsonListeners: React.Dispatch<React.SetStateAction<boolean>>,
-}
-interface existingConnInterface {
-  existConn: boolean,
-  setExistConn: React.Dispatch<React.SetStateAction<boolean>>,
-}
-
-// Singleton SQLite Hook
-export let sqlite: SQLiteHook;
-// Existing Connections Store
-export let existingConn: existingConnInterface;
-// Is Json Listeners used
-export let isJsonListeners: JsonListenerInterface;
-
+import Tab1 from './page/Tab1';
+import Tab2 from './page/Tab2';
+import Tab3 from './page/Tab3';
+import Tools from './page/tools/tools';
+import { addCircleOutline, cashOutline, layersOutline, settingsOutline, trendingUpOutline } from 'ionicons/icons';
 
 setupIonicReact();
 
 const App: React.FC = () => {
-  const [existConn, setExistConn] = useState(false);
-  existingConn = {existConn: existConn, setExistConn: setExistConn};
-
-  // !!!!! if you do not want to use the progress events !!!!!
-  // since react-sqlite-hook 2.1.0
-  // sqlite = useSQLite()
-  // before
-  // sqlite = useSQLite({})
-  // !!!!!                                               !!!!!
-
-  sqlite = useSQLite();
-  console.debug(`App sqlite.isAvailable  ${sqlite.isAvailable}`);
-
-
   return (
     <IonApp>
       <IonReactRouter>

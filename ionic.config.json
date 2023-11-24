@@ -1,7 +1,7 @@
 {
-  "name": "investFlow",
+  "name": "capacitor-sqlite-react-typeorm-app",
   "integrations": {
     "capacitor": {}
   },
-  "type": "react-vite"
+  "type": "react"
 }

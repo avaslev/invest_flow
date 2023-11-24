@@ -22,12 +22,10 @@ services:
   gen:
     volumes:
       - '${PWD}:/local'
-    environment:
-      - TARGET=typescript-rxjs
     image: openapitools/openapi-generator-cli
     command: |
-      generate -i /local/openapi/invest_flow.yml \
-        -g typescript-rxjs -o /local/frontend/rest
+      generate -i /local/openapi/invest_flow.yml
+        -g typescript-rxjs -o /local/frontend/src/rest
   mock:
     stdin_open: true
     tty: true

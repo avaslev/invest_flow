@@ -1,9 +1,9 @@
-import { Tool } from "../../models";
+import { Tool } from "../../entity/tool";
+import { AppDataSource } from "../../service/AppDataSource";
 
 export default function SaveTool (tool: Tool): string
 {
-  tool.id = tool.id ?? '1234';
-  console.log('saveTool', tool);
+  AppDataSource.manager.save(tool);
 
   return tool.id;
 };
