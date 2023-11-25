@@ -3,15 +3,11 @@ import { AppDataSource } from "../../service/AppDataSource";
 
 interface GetToolListCriteria {
   isUser: boolean,
-  isActive: boolean,
+  isArhive: boolean,
 }
 
 export default function GetToolList (criteria?: GetToolListCriteria): Promise<Tool[]>
 {
-  console.log('GetToolList', criteria);
-  // AppDataSource.manager.find(Tool).then((results: Tool[])=> {
-  //   return results;
-  // });
-  return AppDataSource.manager.find(Tool);
+  return AppDataSource.manager.findBy(Tool, criteria ?? []);
 };
 

@@ -1,9 +1,7 @@
 import { Tool } from "../../entity/tool";
 import { AppDataSource } from "../../service/AppDataSource";
 
-export default function SaveTool (tool: Tool): string
+export default function SaveTool (tool: Tool): void
 {
-  AppDataSource.manager.save(tool);
-
-  return tool.id;
+  AppDataSource.getRepository(Tool).save(tool);
 };
