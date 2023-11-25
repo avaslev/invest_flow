@@ -1,5 +1,6 @@
 {
   "name": "invest_flow",
+  "type": "module",
   "private": true,
   "homepage": "./",
   "dependencies": {
@@ -20,6 +21,7 @@
     "@types/node": "^12.19.15",
     "@types/react": "^18.0.17",
     "@types/react-dom": "^18.0.6",
+    "@types/react-modal": "^3.13.1",
     "@types/react-router": "^5.1.11",
     "@types/react-router-dom": "^5.1.7",
     "ionicons": "^6.0.3",
@@ -32,7 +34,6 @@
     "react-sqlite-hook": "^3.2.0",
     "reflect-metadata": "^0.1.13",
     "typeorm": "^0.3.16",
-    "typescript": "^4.4.4",
     "web-vitals": "^0.2.4",
     "workbox-background-sync": "^5.1.4",
     "workbox-broadcast-update": "^5.1.4",
@@ -56,7 +57,11 @@
     "ionic:build": "npm run build",
     "ionic:serve": "npm run start",
     "build_android": "ionic build && npx cap copy --inline android",
-    "build_ios": "ionic build && npx cap copy --inline ios"
+    "build_ios": "ionic build && npx cap copy --inline ios",
+    "typeorm": "typeorm-ts-node-esm",
+    "typeorm:diff": "npm run typeorm migration:generate -- -d src/dataSource/MigrationDataSource.ts",
+    "typeorm:run": "npm run typeorm migration:run -- -d src/dataSource/MigrationDataSource.ts",
+    "typeorm:revert": "npm run typeorm migration:revert"
   },
   "eslintConfig": {
     "extends": [
@@ -80,9 +85,10 @@
     "@capacitor/cli": "^5.0.0",
     "@craco/craco": "^7.1.0",
     "@craco/types": "^7.1.0",
-    "@types/react-modal": "^3.13.1",
     "copyfiles": "^2.4.1",
-    "craco-swc": "^0.5.1"
+    "craco-swc": "^0.5.1",
+    "sqlite3": "^5.1.6",
+    "ts-node": "^10.9.1"
   },
   "repository": {
     "type": "git",

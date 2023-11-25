@@ -1,5 +1,5 @@
 import { Tool } from "../../entity/tool";
-import { AppDataSource } from "../../service/AppDataSource";
+import { AppDataSource } from "../../dataSource/AppDataSource";
 
 interface GetToolListCriteria {
   isUser: boolean,

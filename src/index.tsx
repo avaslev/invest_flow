@@ -11,7 +11,7 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 
 import sqliteConnection from './database';
-import { AppDataSource } from "./service/AppDataSource";
+import { AppDataSource } from "./dataSource/AppDataSource";
 
 type StencilToReact<T> = {
   [P in keyof T]?: T[P] & Omit<HTMLAttributes<Element>, 'className'> & {

@@ -1,4 +1,4 @@
-import { MigrationInterface, QueryRunner, UpdateQueryBuilder } from "typeorm";
+import { MigrationInterface, QueryRunner } from "typeorm";
 import { ToolTypeEnum } from "../entity/tool";
 
 export class ToolCreate1700435403240 implements MigrationInterface {

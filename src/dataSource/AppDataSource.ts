@@ -9,7 +9,11 @@ export const AppDataSource = new DataSource({
     database: "investFlow1",
     mode: "no-encryption",
     synchronize: false,
-    entities: [Tool],
-    migrations: [ToolCreate1700435403240],
+    entities: [
+        Tool,
+    ],
+    migrations: [
+        ToolCreate1700435403240,
+    ],
     logging: true,
 })

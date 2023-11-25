@@ -1,4 +1,4 @@
-export class AbstractEntity {
+export abstract class AbstractEntity {
     fill(props: Object) {
         const self = this;
         Object.keys(props).forEach((key: string) => {
