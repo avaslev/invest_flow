@@ -1,14 +1,15 @@
-import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonPage, IonRippleEffect, IonRow, IonText, IonTitle, IonToolbar, useIonModal } from '@ionic/react';
-import { add, ellipsisHorizontal } from 'ionicons/icons';
+import { IonButton, IonButtons, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonPage, IonRippleEffect, IonRouterOutlet, IonRow, IonText, IonTitle, IonToolbar, useIonModal } from '@ionic/react';
+import { add, caretUpOutline, ellipsisHorizontal } from 'ionicons/icons';
 import React, { useEffect, useState } from 'react';
 import { OverlayEventDetail } from '@ionic/core/components';
 import ToolEditModal, { ToolEditActionEnum } from '../../component/tools/toolEdit';
 import GetToolList from '../../operations/tool/getToolList';
 import SaveTool from '../../operations/tool/saveTool';
 import { Tool, ToolTypeEnum } from '../../entity/tool';
+import ToolItemView from '../../component/tools/toolItemView';
 
 
-const Tools: React.FC = () => {
+const ToolList: React.FC = () => {
   let [tools, setTools] = useState([] as Tool[]);
   const [present, dismiss] = useIonModal(ToolEditModal, {
     onDismiss: (data: string, role: string) => dismiss(data, role),
@@ -22,17 +23,18 @@ const Tools: React.FC = () => {
     }
   });
   let totalTool = {
+    id: 'total',
     name: 'Total',
     isUser: true,
     isArhive: false,
     type: ToolTypeEnum.Cash,
     currentSum: 0,
     prevSum: 0,
-  };
+  } as Tool;
 
   useEffect(() => {
     (async () => {
-      const toolList = await GetToolList({isUser: true, isArhive: false});
+      const toolList = await GetToolList({ isUser: true, isArhive: false });
       if (tools.length == 0 && toolList.length > 0) setTools(toolList);
     })();
   })
@@ -50,10 +52,10 @@ const Tools: React.FC = () => {
     });
   }
 
-  (function (){
+  (function () {
     tools.forEach((value,) => {
-      totalTool.currentSum += value.currentSum ?? 0;
-      totalTool.prevSum += value.prevSum ?? 0;
+      totalTool.currentSum = (value.currentSum ?? 0) + (totalTool.currentSum ?? 0);
+      totalTool.prevSum = (value.prevSum ?? 0) + (totalTool.prevSum ?? 0);
     })
   })();
 
@@ -74,16 +76,12 @@ const Tools: React.FC = () => {
           <IonRow>
             {tools.length > 1 ?
               <IonCol size="6" size-md="4" size-lg="3" key={'total'}>
-                <IonButton expand='block' className='ion-text-wrap' style={{ textTransform: 'none' }}>
-                  <h4>Total</h4>
-                </IonButton>
+                <ToolItemView tool={totalTool}/>
               </IonCol> : ''
             }
             {tools.map((toolItem,) =>
-              <IonCol size="6" size-md="4" size-lg="3"  key={toolItem.id}>
-                <IonButton expand='block' color='light' className='ion-text-wrap' style={{ textTransform: 'none' }}>
-                  <h4>{toolItem.name}</h4>
-                </IonButton>
+              <IonCol size="6" size-md="4" size-lg="3" key={toolItem.id}>
+                <ToolItemView tool={toolItem}/>
               </IonCol>
             )}
           </IonRow>
@@ -93,4 +91,4 @@ const Tools: React.FC = () => {
   );
 }
 
-export default Tools;
+export default ToolList;
