@@ -1,6 +1,5 @@
 {
   "name": "invest_flow",
-  "type": "module",
   "private": true,
   "homepage": "./",
   "dependencies": {
@@ -58,10 +57,9 @@
     "ionic:serve": "npm run start",
     "build_android": "ionic build && npx cap copy --inline android",
     "build_ios": "ionic build && npx cap copy --inline ios",
-    "typeorm": "typeorm-ts-node-esm",
-    "typeorm:diff": "npm run typeorm migration:generate -- -d src/dataSource/MigrationDataSource.ts",
-    "typeorm:run": "npm run typeorm migration:run -- -d src/dataSource/MigrationDataSource.ts",
-    "typeorm:revert": "npm run typeorm migration:revert"
+    "typeorm": "ts-node --project ./tsconfig.orm.json ./node_modules/typeorm/cli",
+    "typeorm:diff": "npm run typeorm migration:generate -- --dataSource src/dataSource/MigrationDataSource.ts src/migration/version",
+    "typeorm:run": "npm run typeorm migration:run -- -d src/dataSource/MigrationDataSource.ts"
   },
   "eslintConfig": {
     "extends": [
