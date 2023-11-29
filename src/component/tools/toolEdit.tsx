@@ -1,6 +1,6 @@
 import React from 'react';
-import { IonButton, IonButtons, IonContent, IonHeader, IonInput, IonItem, IonPage, IonSelect, IonSelectOption, IonText, IonTitle, IonToolbar } from '@ionic/react';
-import { useForm } from 'react-hook-form';
+import { IonButton, IonButtons, IonContent, IonHeader, IonInput, IonItem, IonLabel, IonPage, IonSelect, IonSelectOption, IonText, IonTitle, IonToggle, IonToolbar } from '@ionic/react';
+import { Controller, useForm } from 'react-hook-form';
 // import { yupResolver } from "@hookform/resolvers/yup"
 import { Tool, ToolTypeEnum } from '../../entity/tool';
 // import { Tool, ToolSchema, ToolTypeEnum } from '../../model/Tool';
@@ -8,24 +8,22 @@ import { Tool, ToolTypeEnum } from '../../entity/tool';
 
 export enum ToolEditActionEnum {
   Cancel = 'cancel',
-  Save = 'save'
+  Save = 'save',
+  Delete = 'delete',
 }
 
-const ToolEditModal = ({
-  onDismiss,
-  tool,
-}: {
+export interface ToolEditModalProp {
   onDismiss: (data?: Tool | null, role?: string) => void;
   tool: Tool
-}) => {
-  const {
-    handleSubmit,
-    register,
-    formState: { errors }
-  } = useForm({
+}
+
+const ToolEditModal = (prop: ToolEditModalProp) => {
+  const {handleSubmit,control,setValue,register,formState: { errors }} = useForm({
     // resolver: yupResolver(ToolSchema),
-    defaultValues: tool
+    defaultValues: prop.tool
   });
+
+  console.log(prop);
 
   function capitalizeFirstLetter(str: string): string {
     return str.charAt(0).toUpperCase() + str.slice(1);
@@ -35,7 +33,7 @@ const ToolEditModal = ({
     if (!data.id) {
       data.prevSum = data.currentSum;
     }
-    onDismiss(data, ToolEditActionEnum.Save)
+    prop.onDismiss(data, ToolEditActionEnum.Save)
   };
 
   return (
@@ -44,7 +42,7 @@ const ToolEditModal = ({
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonButton color="medium" onClick={() => onDismiss(null, ToolEditActionEnum.Cancel)}>
+            <IonButton color="medium" onClick={() => prop.onDismiss(null, ToolEditActionEnum.Cancel)}>
               Cancel
             </IonButton>
           </IonButtons>
@@ -60,10 +58,10 @@ const ToolEditModal = ({
           <IonSelect
             // label="Type"
             // labelPlacement="stacked"
-            disabled={tool.id ? true : false}
+            disabled={prop.tool.id ? true : false}
             {...register('type')}
           >
-            {[ToolTypeEnum.Cash].map((type) => <IonSelectOption value={type}>
+            {[ToolTypeEnum.Cash].map((type) => <IonSelectOption key={type} value={type}>
               {capitalizeFirstLetter(type)}
             </IonSelectOption>)}
           </IonSelect>
@@ -84,10 +82,28 @@ const ToolEditModal = ({
             // label="Current sum"
             type='number'
             // errorText={errors.currentSum?.message}
-            disabled={tool.id ? true : false}
+            disabled={prop.tool.id ? true : false}
             {...register('currentSum')}
           />
         </IonItem>
+          {/* @see https://www.webune.com/forums/aapypz.html*/}
+          <IonItem>
+            <IonLabel>archive</IonLabel>
+            <Controller
+              name="isArhive"
+              control={control}
+              render={({ field }) => {
+                return (
+                  <IonToggle
+                    checked={field.value}
+                    onIonChange={e => {
+                      setValue('isArhive', e.detail.checked);
+                    }}
+                  />
+                );
+              }}
+            />
+          </IonItem>
       </IonContent>
     </IonPage>
     </form>

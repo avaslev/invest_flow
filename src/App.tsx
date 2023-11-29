@@ -1,6 +1,6 @@
 import React  from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonIcon, IonLabel, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, setupIonicReact } from '@ionic/react';
+import { IonApp, IonIcon, IonLabel, IonRoute, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, setupIonicReact } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 
 /* Core CSS required for Ionic components to work properly */
@@ -24,8 +24,8 @@ import './theme/variables.css';
 import Tab1 from './page/Tab1';
 import Tab2 from './page/Tab2';
 import Tab3 from './page/Tab3';
-import Tools from './page/tools/tools';
 import { addCircleOutline, cashOutline, layersOutline, settingsOutline, trendingUpOutline } from 'ionicons/icons';
+import Tools from './page/tools/tools';
 
 setupIonicReact();
 
@@ -44,13 +44,12 @@ const App: React.FC = () => {
             <Route path="/tab3">
               <Tab3 />
             </Route>
-            <Route path="/tools">
-              <Tools />
-            </Route>
+            <Route path='/tools'><Tools /></Route>
             <Route exact path="/">
               <Redirect to="/tab1" />
             </Route>
           </IonRouterOutlet>
+          
           <IonTabBar slot="bottom">
             <IonTabButton tab="tab1" href="/tab1">
               <IonIcon aria-hidden="true" icon={layersOutline} />

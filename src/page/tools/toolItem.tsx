@@ -1,7 +1,13 @@
-import { IonBackButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonContent, IonHeader, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import { IonBackButton, IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle, IonContent, IonHeader, IonIcon, IonPage, IonTitle, IonToolbar, useIonModal } from '@ionic/react';
 import ExploreContainer from '../../component/ExploreContainer';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
+import { add, createOutline, ellipsisHorizontal, ellipsisVertical, personCircle, search } from 'ionicons/icons';
+import GetTool from '../../operation/tool/getTool';
+import { Tool } from '../../entity/tool';
+import ToolEditModal, { ToolEditActionEnum } from '../../component/tools/toolEdit';
+import { OverlayEventDetail } from '@ionic/react/dist/types/components/react-component-lib/interfaces';
+import SaveTool from '../../operation/tool/saveTool';
 
 interface ToolItemParams {
   id: string;
@@ -10,6 +16,37 @@ interface ToolItemParams {
 const ToolItem: React.FC = () => {
   const params: ToolItemParams = useParams();
   console.log(params);
+  let [tool, setTool] = useState<Tool | null>(null);
+
+  const [present, dismiss] = useIonModal(
+    ToolEditModal, 
+    {
+      onDismiss: (data: string, role: string) => dismiss(data, role),
+      tool: tool,
+    }
+  );
+
+  useEffect(() => {
+    (async () => {
+      console.log(tool, tool === null);
+      if (tool === null) {
+        setTool(await GetTool(params.id));
+      }
+    })();
+  })
+
+  function openModal() {
+    present({
+      onWillDismiss: (ev: CustomEvent<OverlayEventDetail>) => {
+        if (ev.detail.role === ToolEditActionEnum.Save && tool) {
+          tool.fill(ev.detail.data);
+          SaveTool(tool);
+          setTool(tool);
+        }
+      },
+    });
+  }
+
   return (
     <IonPage>
       <IonHeader>
@@ -17,12 +54,19 @@ const ToolItem: React.FC = () => {
           <IonButtons slot="start">
             <IonBackButton defaultHref="/tools"></IonBackButton>
           </IonButtons>
-          <IonTitle>{params.id}</IonTitle>
+          <IonButtons slot="primary">
+          <IonButton onClick={() => openModal()}>
+              <IonIcon slot="icon-only" icon={createOutline}></IonIcon>
+            </IonButton>
+          </IonButtons>
+          <IonTitle>{tool?.name}</IonTitle>
+
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
         <IonCard>
           <IonCardHeader>
+
             <IonCardTitle>Card Title</IonCardTitle>
             <IonCardSubtitle>Card Subtitle</IonCardSubtitle>
           </IonCardHeader>

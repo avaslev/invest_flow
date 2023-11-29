@@ -3,8 +3,8 @@ import { add, caretUpOutline, ellipsisHorizontal } from 'ionicons/icons';
 import React, { useEffect, useState } from 'react';
 import { OverlayEventDetail } from '@ionic/core/components';
 import ToolEditModal, { ToolEditActionEnum } from '../../component/tools/toolEdit';
-import GetToolList from '../../operations/tool/getToolList';
-import SaveTool from '../../operations/tool/saveTool';
+import GetToolList from '../../operation/tool/getToolList';
+import SaveTool from '../../operation/tool/saveTool';
 import { Tool, ToolTypeEnum } from '../../entity/tool';
 import ToolItemView from '../../component/tools/toolItemView';
 
@@ -65,7 +65,7 @@ const ToolList: React.FC = () => {
         <IonToolbar>
           <IonButtons slot="primary">
             <IonButton onClick={() => openModal()}>
-              <IonIcon slot="icon-only" ios={ellipsisHorizontal} md={add} />
+              <IonIcon slot="icon-only" icon={add} />
             </IonButton>
           </IonButtons>
           <IonTitle>Tools</IonTitle>
