@@ -1,6 +1,6 @@
 import React  from 'react';
 import { Redirect, Route } from 'react-router-dom';
-import { IonApp, IonIcon, IonLabel, IonRoute, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, setupIonicReact } from '@ionic/react';
+import { IonApp, IonIcon, IonItem, IonLabel, IonRoute, IonRouterOutlet, IonTabBar, IonTabButton, IonTabs, setupIonicReact, useIonModal } from '@ionic/react';
 import { IonReactRouter } from '@ionic/react-router';
 
 /* Core CSS required for Ionic components to work properly */
@@ -23,9 +23,10 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import Tab1 from './page/Tab1';
 import Tab2 from './page/Tab2';
-import Tab3 from './page/Tab3';
 import { addCircleOutline, cashOutline, layersOutline, settingsOutline, trendingUpOutline } from 'ionicons/icons';
 import Tools from './page/tools/tools';
+import Add from './page/add/add';
+import Diagrams from './page/diagrams/diagrams';
 
 setupIonicReact();
 
@@ -38,11 +39,14 @@ const App: React.FC = () => {
             <Route exact path="/tab1">
               <Tab1 />
             </Route>
-            <Route exact path="/tab2">
+            <Route exact path="/diagrams">
+              <Diagrams />
+            </Route>
+            <Route path="/tab2">
               <Tab2 />
             </Route>
-            <Route path="/tab3">
-              <Tab3 />
+            <Route path="/add">
+              <Add />
             </Route>
             <Route path='/tools'><Tools /></Route>
             <Route exact path="/">
@@ -55,18 +59,18 @@ const App: React.FC = () => {
               <IonIcon aria-hidden="true" icon={layersOutline} />
               <IonLabel>actions</IonLabel>
             </IonTabButton>
-            <IonTabButton tab="tab3" href="/tab3">
+            <IonTabButton tab="diagrams" href="/diagrams">
               <IonIcon aria-hidden="true" icon={trendingUpOutline} />
               <IonLabel>diagrams</IonLabel>
             </IonTabButton>
-            <IonTabButton tab="tab2" href="/tab2">
-              <IonIcon aria-hidden="true" icon={addCircleOutline} size='large' />
+            <IonTabButton tab="add" href='/add'>
+            <IonIcon aria-hidden="true" icon={addCircleOutline} size='large' />
             </IonTabButton>
             <IonTabButton tab="tools" href="/tools">
               <IonIcon aria-hidden="true" icon={cashOutline} />
               <IonLabel>tools</IonLabel>
             </IonTabButton>
-            <IonTabButton tab="tab3" href="/tab3">
+            <IonTabButton tab="tab2" href="/tab2">
               <IonIcon aria-hidden="true" icon={settingsOutline} />
               <IonLabel>settings</IonLabel>
             </IonTabButton>
