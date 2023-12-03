@@ -86,7 +86,7 @@ const ToolEditModal = (prop: ToolEditModalProp) => {
             {...register('currentSum')}
           />
         </IonItem>
-          {/* @see https://www.webune.com/forums/aapypz.html*/}
+          {/* @see https://www.webune.com/forums/aapypz.html */}
           <IonItem>
             <IonLabel>archive</IonLabel>
             <Controller

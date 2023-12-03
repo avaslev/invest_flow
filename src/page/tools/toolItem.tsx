@@ -15,11 +15,10 @@ interface ToolItemParams {
 
 const ToolItem: React.FC = () => {
   const params: ToolItemParams = useParams();
-  console.log(params);
   let [tool, setTool] = useState<Tool | null>(null);
 
   const [present, dismiss] = useIonModal(
-    ToolEditModal, 
+    ToolEditModal,
     {
       onDismiss: (data: string, role: string) => dismiss(data, role),
       tool: tool,
@@ -28,7 +27,6 @@ const ToolItem: React.FC = () => {
 
   useEffect(() => {
     (async () => {
-      console.log(tool, tool === null);
       if (tool === null) {
         setTool(await GetTool(params.id));
       }
@@ -55,12 +53,11 @@ const ToolItem: React.FC = () => {
             <IonBackButton defaultHref="/tools"></IonBackButton>
           </IonButtons>
           <IonButtons slot="primary">
-          <IonButton onClick={() => openModal()}>
+            <IonButton onClick={() => openModal()}>
               <IonIcon slot="icon-only" icon={createOutline}></IonIcon>
             </IonButton>
           </IonButtons>
           <IonTitle>{tool?.name}</IonTitle>
-
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>

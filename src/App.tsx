@@ -25,7 +25,7 @@ import Tab1 from './page/Tab1';
 import Tab2 from './page/Tab2';
 import { addCircleOutline, cashOutline, layersOutline, settingsOutline, trendingUpOutline } from 'ionicons/icons';
 import Tools from './page/tools/tools';
-import Add from './page/add/add';
+import Add from './page/add/editAction';
 import Diagrams from './page/diagrams/diagrams';
 
 setupIonicReact();
