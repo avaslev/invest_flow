@@ -10,4 +10,3 @@ export default function GetToolList (criteria?: GetToolListCriteria): Promise<To
 {
   return AppDataSource.manager.findBy(Tool, criteria ?? []);
 };
-

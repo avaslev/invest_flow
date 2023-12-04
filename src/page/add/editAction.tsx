@@ -4,6 +4,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { Action, ActionOperationEnum } from '../../entity/action';
 import GetToolList from '../../operation/tool/getToolList';
 import { Tool } from '../../entity/tool';
+import SaveAction from '../../operation/action/save';
 
 enum ModeEditActionEnum {
   Income = 'income',
@@ -51,6 +52,8 @@ const EditAction: React.FC = () => {
   });
 
   const onSubmit = (data: any) => {
+    let action: Action = (new Action()).fill(data);
+    SaveAction(action);
     console.debug(data);
   };
 
@@ -120,6 +123,7 @@ const EditAction: React.FC = () => {
             <IonToolbar className="ion-text-center">
               {modeEditActionList.map((item: ModeEditAction) =>
                 <IonButton disabled={item.name === mode} color={item.color}
+                  key={'mode_'+item.name}
                   onClick={() => setMode(item.name)}>
                   {item.name}</IonButton>)}
             </IonToolbar>

@@ -21,7 +21,7 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import Tab1 from './page/Tab1';
+import Actions from './page/actions/actions';
 import Tab2 from './page/Tab2';
 import { addCircleOutline, cashOutline, layersOutline, settingsOutline, trendingUpOutline } from 'ionicons/icons';
 import Tools from './page/tools/tools';
@@ -36,8 +36,8 @@ const App: React.FC = () => {
       <IonReactRouter>
         <IonTabs>
           <IonRouterOutlet>
-            <Route exact path="/tab1">
-              <Tab1 />
+            <Route exact path="/actions">
+              <Actions />
             </Route>
             <Route exact path="/diagrams">
               <Diagrams />
@@ -50,12 +50,12 @@ const App: React.FC = () => {
             </Route>
             <Route path='/tools'><Tools /></Route>
             <Route exact path="/">
-              <Redirect to="/tab1" />
+              <Redirect to="/actions" />
             </Route>
           </IonRouterOutlet>
           
           <IonTabBar slot="bottom">
-            <IonTabButton tab="tab1" href="/tab1">
+            <IonTabButton tab="tab1" href="/actions">
               <IonIcon aria-hidden="true" icon={layersOutline} />
               <IonLabel>actions</IonLabel>
             </IonTabButton>
