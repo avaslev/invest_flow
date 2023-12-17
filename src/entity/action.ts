@@ -5,6 +5,7 @@ import { Tool } from "./tool";
 export enum ActionOperationEnum {
     Income = 'income',
     Outlay = 'outlay',
+    Transmit = 'transmit',
 }
 
 @Entity()
