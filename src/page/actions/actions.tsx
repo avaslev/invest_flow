@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import GetActionList from '../../operation/action/getList';
 import { Action } from '../../entity/action';
 import { chevronBack, chevronForward } from 'ionicons/icons';
+import ActionItemView from '../../component/actions/actionItemView';
 
 interface Period {
   name: string;
@@ -10,30 +11,50 @@ interface Period {
   to: Date;
 }
 
-const periods: Period[] = [
-  {
-    name: '11.2023',
-    from: new Date('2023-11-01'),
-    to: new Date('2023-12-01'),
-  },
-  {
-    name: '12.2023',
-    from: new Date('2023-12-01'),
-    to: new Date('2024-01-01'),
-  },
-];
-
 const Actions: React.FC = () => {
   let [actionsByDate, setActions] = useState<Map<Date, Array<Action>> | undefined>(undefined);
-  const refreshActions = () => { (async () => matchActionByDate(await GetActionList({
-    dateFrom: periods[periodIndex].from,
-    dateTo: periods[periodIndex].to,
-  })))() };
-  let [periodIndex, setPeriodIndex] = useState(periods.length - 1);
+  let [periods, setPeriods] = useState([] as Period[]);
+  const [periodIndex, setPeriodIndex] = useState(periods.length - 1);
+
+  const refreshActions = (period: Period) => {
+    (async () => matchActionByDate(await GetActionList({
+      dateFrom: period.from,
+      dateTo: period.to,
+    })))()
+  };
 
   useEffect(() => {
-    if (actionsByDate === undefined) {
-      refreshActions();
+    (async () => {
+      if (periods.length === 0) {
+        const now = new Date();
+        const minItem = await GetActionList({dateOrder: 'ASC', take: 1});
+        let minDate = new Date(minItem[0] ? minItem[0].date : '');
+        minDate.setDate(1);
+        const maxItem = await GetActionList({dateOrder: 'DESC', take: 1});
+        const maxDate = new Date(maxItem[0] ? maxItem[0].date : '');
+        // Собрать прериоды из минимальной и максимальной даты.
+        let curretnIndex:number = 0;
+        periods = [];
+        while (minDate <= maxDate) {
+          periods.push({
+            name: ('00' + (minDate.getMonth()+1)).slice(-2) + '.' + minDate.getFullYear(), 
+            from: new Date(minDate), 
+            to: new Date(minDate.getFullYear(), minDate.getMonth()+1, 0),
+          });
+          minDate.setMonth(minDate.getMonth() + 1);
+          if (
+            minDate.getFullYear() < now.getFullYear() ||
+            (minDate.getMonth() <= now.getMonth() && minDate.getFullYear() == now.getFullYear())){
+            curretnIndex++;
+          }
+        }
+        setPeriods(periods);
+        setPeriodIndex(curretnIndex);
+        // refreshActions(periods[periods.length - 1]);
+      }
+    })();
+    if (periods.length >0 && actionsByDate === undefined) {
+      refreshActions(periods[periodIndex]);
     }
   })
 
@@ -49,7 +70,7 @@ const Actions: React.FC = () => {
   }
 
   const handleRefresh = (event: CustomEvent<RefresherEventDetail>) => {
-    refreshActions();
+    setActions(undefined);
     event.detail.complete();
   }
 
@@ -58,21 +79,22 @@ const Actions: React.FC = () => {
     setActions(undefined);
   }
 
-  console.log(actionsByDate);
-  console.log((Array.from(actionsByDate ?? [])));
+  // console.log(periods);
+  // console.log(actionsByDate);
+  // console.log((Array.from(actionsByDate ?? [])));
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
           <IonButtons slot="start">
-            <IonButton shape="round" disabled={periodIndex === 0} 
-            onClick={() => changePeriod(-1)}>
-            <IonIcon slot="icon-only" icon={chevronBack}></IonIcon>
+            <IonButton shape="round" disabled={periodIndex === 0}
+              onClick={() => changePeriod(-1)}>
+              <IonIcon slot="icon-only" icon={chevronBack}></IonIcon>
             </IonButton>
-            {periods[periodIndex].name}
-            <IonButton shape="round" disabled={(periodIndex+1) === periods.length}
-            onClick={() => changePeriod(1)}>
-            <IonIcon slot="icon-only" icon={chevronForward}></IonIcon>
+            {periods[periodIndex]?.name}
+            <IonButton shape="round" disabled={(periodIndex + 1) === periods.length}
+              onClick={() => changePeriod(1)}>
+              <IonIcon slot="icon-only" icon={chevronForward}></IonIcon>
             </IonButton>
           </IonButtons>
         </IonToolbar>
@@ -88,9 +110,7 @@ const Actions: React.FC = () => {
             </IonItemDivider>
             {item[1].map((action: Action) =>
               <IonItemSliding>
-                <IonItem>
-                  <IonLabel>{action.operation} {action.tool.name} {action.sum}</IonLabel>
-                </IonItem>
+                <ActionItemView action={action} />
                 <IonItemOptions>
                   <IonItemOption>ok</IonItemOption>
                 </IonItemOptions>
