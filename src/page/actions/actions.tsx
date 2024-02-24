@@ -1,8 +1,8 @@
-import { IonButton, IonButtons, IonContent, IonHeader, IonIcon, IonItem, IonItemDivider, IonItemGroup, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonPage, IonRefresher, IonRefresherContent, IonTitle, IonToolbar, RefresherEventDetail } from '@ionic/react';
+import { IonButton, IonButtons, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonItem, IonItemDivider, IonItemGroup, IonItemOption, IonItemOptions, IonItemSliding, IonLabel, IonPage, IonRefresher, IonRefresherContent, IonRow, IonTitle, IonToolbar, RefresherEventDetail } from '@ionic/react';
 import React, { useEffect, useState } from 'react';
 import GetActionList from '../../operation/action/getList';
 import { Action } from '../../entity/action';
-import { chevronBack, chevronForward } from 'ionicons/icons';
+import { chevronBack, chevronForward, fileTrayFullOutline, fileTrayOutline } from 'ionicons/icons';
 import ActionItemView from '../../component/actions/actionItemView';
 
 interface Period {
@@ -100,7 +100,7 @@ const Actions: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
-      <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
+        <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
           <IonRefresherContent></IonRefresherContent>
         </IonRefresher>
         {Array.from(actionsByDate ?? []).map((item: [Date, Action[]]) =>
@@ -118,6 +118,16 @@ const Actions: React.FC = () => {
             )}
           </IonItemGroup>
         )}
+        <IonGrid style={{ 
+          height: "100%", 
+          display: actionsByDate === undefined || actionsByDate.size === 0 ? null : 'none', 
+          }}>
+            <IonRow class="ion-align-items-center" style={{ height: "100%" }}>
+                <IonCol class="ion-text-center">
+                    <IonIcon icon={fileTrayOutline} size='large'/>
+                </IonCol>
+            </IonRow>
+        </IonGrid>
       </IonContent>
     </IonPage>
   );

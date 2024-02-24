@@ -1,4 +1,4 @@
-import { IonButton, IonButtons, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonPage, IonRippleEffect, IonRouterOutlet, IonRow, IonText, IonTitle, IonToolbar, useIonModal } from '@ionic/react';
+import { IonButton, IonButtons, IonCard, IonCardHeader, IonCardSubtitle, IonCardTitle, IonCol, IonContent, IonGrid, IonHeader, IonIcon, IonPage, IonRefresher, IonRefresherContent, IonRippleEffect, IonRouterOutlet, IonRow, IonText, IonTitle, IonToolbar, useIonModal, RefresherEventDetail } from '@ionic/react';
 import { add, caretUpOutline, ellipsisHorizontal } from 'ionicons/icons';
 import React, { useEffect, useState } from 'react';
 import { OverlayEventDetail } from '@ionic/core/components';
@@ -6,11 +6,12 @@ import ToolEditModal, { ToolEditActionEnum } from '../../component/tools/toolEdi
 import GetToolList from '../../operation/tool/getToolList';
 import SaveTool from '../../operation/tool/saveTool';
 import { Tool, ToolTypeEnum } from '../../entity/tool';
-import ToolItemView from '../../component/tools/toolItemView';
+import ToolItemView, { ToolListItem } from '../../component/tools/toolItemView';
+import GetSumByTool, { SumTool } from '../../operation/tool/getSumByTool';
 
 
 const ToolList: React.FC = () => {
-  let [tools, setTools] = useState([] as Tool[]);
+  let [toolList, setToolList] = useState([] as ToolListItem[]);
   const [present, dismiss] = useIonModal(ToolEditModal, {
     onDismiss: (data: string, role: string) => dismiss(data, role),
     tool: {
@@ -22,20 +23,30 @@ const ToolList: React.FC = () => {
       prevSum: 0,
     }
   });
-  let totalTool = {
-    id: 'total',
-    name: 'Total',
-    isUser: true,
-    isArhive: false,
-    type: ToolTypeEnum.Cash,
-    currentSum: 0,
-    prevSum: 0,
-  } as Tool;
+  let totalToolListItem = {
+    tool: {
+      id: 'total',
+      name: 'Total',
+      isUser: true,
+      isArhive: false,
+      type: ToolTypeEnum.Cash,
+      currentSum: 0,
+      prevSum: 0,
+    }
+  } as ToolListItem;
 
   useEffect(() => {
     (async () => {
-      const toolList = await GetToolList({ isUser: true, isArhive: false });
-      if (tools.length == 0 && toolList.length > 0) setTools(toolList);
+      let newToolList:ToolListItem[] = [];
+      const tools = await GetToolList({ isUser: true, isArhive: false });
+      tools.forEach(async (value,) => {
+        newToolList.push({
+          tool: value,
+          total: await GetSumByTool({tool: value})
+        });
+      })
+      console.log(newToolList);
+      if (toolList.length == 0 && tools.length > 0) setToolList(newToolList);
     })();
   })
 
@@ -45,18 +56,28 @@ const ToolList: React.FC = () => {
         if (ev.detail.role === ToolEditActionEnum.Save) {
           let tool: Tool = (new Tool()).fill(ev.detail.data);
           SaveTool(tool);
-          tools.push(tool);
-          setTools(tools);
+          toolList.push({tool: tool});
+          setToolList(toolList);
         }
       },
     });
   }
 
+  const handleRefresh = (event: CustomEvent<RefresherEventDetail>) => {
+    setToolList([]);
+    event.detail.complete();
+  }
+
   (function () {
-    tools.forEach((value,) => {
-      totalTool.currentSum = (value.currentSum ?? 0) + (totalTool.currentSum ?? 0);
-      totalTool.prevSum = (value.prevSum ?? 0) + (totalTool.prevSum ?? 0);
+    toolList.forEach((value,) => {
+      totalToolListItem.total = totalToolListItem.total ?? {in: 0, out: 0, transmitIn: 0, transmitOut: 0} as SumTool;
+      value.total = value.total ?? {} as SumTool;
+      totalToolListItem.total.in += value.total.in ?? 0;
+      totalToolListItem.total.out += value.total.out ?? 0;
+      totalToolListItem.total.transmitIn += value.total.transmitIn ?? 0;
+      totalToolListItem.total.transmitOut += value.total.transmitOut ?? 0;
     })
+    console.log(totalToolListItem);
   })();
 
   return (
@@ -72,16 +93,19 @@ const ToolList: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
+        <IonRefresher slot="fixed" onIonRefresh={handleRefresh}>
+          <IonRefresherContent></IonRefresherContent>
+        </IonRefresher>
         <IonGrid>
           <IonRow>
-            {tools.length > 1 ?
+            {toolList.length > 1 ?
               <IonCol size="6" size-md="4" size-lg="3" key={'total'}>
-                <ToolItemView tool={totalTool}/>
+                <ToolItemView toolItem={totalToolListItem}/>
               </IonCol> : ''
             }
-            {tools.map((toolItem,) =>
-              <IonCol size="6" size-md="4" size-lg="3" key={toolItem.id}>
-                <ToolItemView tool={toolItem}/>
+            {toolList.map((toolItem,) =>
+              <IonCol size="6" size-md="4" size-lg="3" key={toolItem.tool.id}>
+                <ToolItemView toolItem={toolItem}/>
               </IonCol>
             )}
           </IonRow>

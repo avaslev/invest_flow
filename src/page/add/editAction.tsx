@@ -59,7 +59,13 @@ const EditAction: React.FC = () => {
       const toolList = await GetToolList({ isUser: true, isArhive: false });
       tools.length == 0 && toolList.length > 0 && setTools(toolList);
       const categoryList = await GetActionCategoryList();
-      categories.length == 0 && categoryList.length > 0 && setCategories(categoryList);
+      if (categories.length == 0 ) {
+        if (categoryList.length > 0) {
+          setCategories(categoryList);
+        } else {
+          setCategories([{name: 'other', num: 0}]);
+        }
+      }
     })();
   })
 
@@ -165,7 +171,7 @@ const EditAction: React.FC = () => {
               label="Category"
               onClick={() => setModalItems({
                 name: 'category',
-                items: [...categories.map((item) => item.name), 'other'],
+                items: categories.map((item) => item.name),
                 addItem: true
               } as ModalProps)}
               // errorText={errors.name?.message}
