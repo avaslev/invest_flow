@@ -1,6 +1,5 @@
 import { Tool } from "../../entity/tool";
 import { AppDataSource } from "../../dataSource/AppDataSource";
-import { IonText } from "@ionic/react";
 import { Action, ActionOperationEnum } from "../../entity/action";
 
 interface GetSumByToolCriteria {
@@ -44,7 +43,7 @@ export default function GetSumByTool (criteria: GetSumByToolCriteria): Promise<S
     .addSelect((subQuery) => {
       return subQuery.select("SUM(a3.sum)", "transmitIn").from(Action, "a3")
         .where(
-          'a3.tool = :toolId and a3.date > :from and a3.operation = :transmitIn', 
+          'a3.toolTo = :toolId and a3.date > :from and a3.operation = :transmitIn', 
           {toolId: criteria.tool.id, from: criteria.from, transmitIn: ActionOperationEnum.Transmit},
         )
         .andWhere('a3.date <= :to', {to: new Date()})
@@ -53,7 +52,7 @@ export default function GetSumByTool (criteria: GetSumByToolCriteria): Promise<S
     .addSelect((subQuery) => {
       return subQuery.select("SUM(a4.sum)", "transmitOut").from(Action, "a4")
         .where(
-          'a4.toolTo = :toolId and a4.date > :from and a4.operation = :transmitOut', 
+          'a4.tool = :toolId and a4.date > :from and a4.operation = :transmitOut', 
           {toolId: criteria.tool.id, from: criteria.from, transmitOut: ActionOperationEnum.Transmit},
         )
         .andWhere('a4.date <= :to', {to: new Date()})

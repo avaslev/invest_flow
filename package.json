@@ -55,8 +55,8 @@
     "copysqlwasm": "copyfiles -u 3 node_modules/sql.js/dist/sql-wasm.wasm public/assets",
     "ionic:build": "npm run build",
     "ionic:serve": "npm run start",
-    "build_android": "ionic build && npx cap copy --inline android",
-    "build_ios": "ionic build && npx cap copy --inline ios",
+    "build:android": "ionic build && npx cap copy --inline android",
+    "build:ios": "ionic build && npx cap copy --inline ios",
     "typeorm": "ts-node --project ./tsconfig.orm.json ./node_modules/typeorm/cli",
     "typeorm:diff": "npm run typeorm migration:generate -- --dataSource src/dataSource/MigrationDataSource.ts src/migration/version",
     "typeorm:run": "npm run typeorm migration:run -- -d src/dataSource/MigrationDataSource.ts"
@@ -83,6 +83,7 @@
     "@capacitor/cli": "^5.5.1",
     "@craco/craco": "^7.1.0",
     "@craco/types": "^7.1.0",
+    "@ionic/cli": "^7.2.0",
     "copyfiles": "^2.4.1",
     "craco-swc": "^0.5.1",
     "sqlite3": "^5.1.6",
